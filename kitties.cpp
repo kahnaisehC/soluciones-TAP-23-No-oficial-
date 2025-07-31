@@ -8,6 +8,71 @@ const int MAX = 1048580;
 vector<int> inicios;
 vector<int> finales;
 
+typedef struct _treap{
+	int value;
+	int priority;
+	_treap* left;
+	_treap* right;
+
+}treap;
+
+pair<treap*, treap*> split(treap* t, int key){
+	if(t == nullptr)return {nullptr, nullptr};
+	treap* leftP;
+	treap* rightP;
+	if(t->value <= key){
+		{leftP, rightP} = split(t->right);
+		t->right = leftP;
+		return {t, rightP};
+	}
+		{leftP, rightP} = split(t->left);
+	t->left = rightP;
+	return {leftP, t};
+}
+
+treap* merge(treap* left, treap* right){
+	treap* root;
+	if(left == nullptr) return right;
+	if(right == nullptr) return left;
+	if(left->priority > right->priority){
+		root = left;
+		treap* newRight = merge(left->right, right);
+		root->right = newRight;
+	}else{
+		root = right;
+		treap* newLeft = merge(left, right->left);
+		root->left = newLeft;
+	}
+	return root;
+}
+
+treap* insert(treap* t, treap* newNode){
+	if(t == nullptr){
+		t = newNode;
+		return newNode;
+	}
+	if(t->priority < newNode->priority){
+		treap* left;
+		treap* right;
+		{left, right} = split(t, newNode->value);
+		newNode->right = right;
+		newNode->left = left;
+		return 
+	}
+
+}
+
+
+
+typedef struct _treap_of_treaps{
+	int x;
+	int y;
+	int priority;
+	treap* tree;
+	_treap_of_treaps left;
+	_treap_of_treaps right;
+}treap_of_treaps;
+
 
 vector<int> coordenadas;
 
