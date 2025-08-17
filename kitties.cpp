@@ -25,7 +25,7 @@ pair<treap*, treap*> split(treap* t, int key){
 		t->right = leftP;
 		return {t, rightP};
 	}
-		{leftP, rightP} = split(t->left);
+	{leftP, rightP} = split(t->left);
 	t->left = rightP;
 	return {leftP, t};
 }
@@ -46,6 +46,15 @@ treap* merge(treap* left, treap* right){
 	return root;
 }
 
+treap* createNode(int key){
+	treap* t = (treap*)malloc(sizeof(treap));
+	t->value = key;
+	t->priority = rand();
+	t->left = nullptr;
+	t->right = nullptr;
+	return t;
+}
+
 treap* insert(treap* t, treap* newNode){
 	if(t == nullptr){
 		t = newNode;
@@ -59,10 +68,28 @@ treap* insert(treap* t, treap* newNode){
 		newNode->left = left;
 		return 
 	}
-
 }
 
-
+treap* erase(treap* t, int value){
+	if(t == nullptr)return t;
+	if(t->value == value){
+		treap* newT = merge(t->left, t->right);
+		free(t);
+		t = nullptr;
+		return newT;
+	}
+	if(t->value > value){
+		treap* newTreap = erase(t->right, value);
+		t = newTreap;
+		return t;
+	}
+	if(t->value < value){
+		treap* newTreap = erase(t->left, value);
+		t = newTreap;
+		return t;
+	}
+	return nullptr;
+}
 
 typedef struct _treap_of_treaps{
 	int x;
@@ -72,6 +99,7 @@ typedef struct _treap_of_treaps{
 	_treap_of_treaps left;
 	_treap_of_treaps right;
 }treap_of_treaps;
+
 
 
 vector<int> coordenadas;
